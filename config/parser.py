@@ -1,11 +1,14 @@
 from configparser import ConfigParser
-import os
+import os, pathlib
 
 def parse_config():
     conf = ConfigParser()
     conf.read(f"{os.getcwd}/config/config.cfg")
-    return {
-        "hashfile": conf.get("user.settings", "hashfile", fallback=conf.get("DEFAULT", "hashfile")),
-        "hashpath": conf.get("user.settings", "hashpath", fallback=conf.get("DEFAULT", "hashpath")),
-        "location": conf.get("user.settings", "location", fallback=conf.get("DEFAULT", "location"))
+    conf = {
+        "hashfile": conf.get("user.settings", "hashfile", fallback="hash.file"),
+        "hashpath": conf.get("user.settings", "hashpath", fallback=".passman"),
+        "location": conf.get("user.settings", "location", fallback="~")
         }
+    
+    pathlib.Path(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}").mkdir(exist_ok=True)
+    return conf
