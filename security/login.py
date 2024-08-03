@@ -7,10 +7,11 @@ import json
 
 def login():
     #TODO this will be replaced by the config parser.
+    ## ---------------------------------------------
     filename = "hash.file"
-    filepath = "~/.passman/"
+    filepath = f"{os.path.expanduser("~")}/.passman/"
     filepath_complete = filepath + filename
-
+    ## ---------------------------------------------
     did_hashfile_exist = True
 
 
@@ -21,7 +22,7 @@ def login():
 
     login_details = {"username": "", "password": ""}
     print("Since this is your first time accessing this program you will need to set up a new login.") if not did_hashfile_exist else None
-    login_details["username"] = input("Username:")
+    login_details["username"] = input("Username: ")
     login_details["password"] = getpass()
 
     hashed_login = sha256(json.dumps(login_details).encode()).hexdigest()
