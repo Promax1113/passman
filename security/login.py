@@ -29,12 +29,12 @@ def login():
 
     if not did_hashfile_exist:
         create_hashfile(filepath_complete, hashed_login)
-        return 200
+        return 200, login_details
 
     if parse_hashfile(filepath_complete) == hashed_login:
-        return 200
+        return 200, login_details
     else:
-        return 401
+        return 401, "Access denied."
     
 
 def create_hashfile(filepath: str, data: str = ""):
