@@ -3,14 +3,14 @@ from hashlib import sha256
 import os
 import choice
 import json
+from config import parse_config
 
 
 def login():
     #TODO this will be replaced by the config parser.
     ## ---------------------------------------------
-    filename = "hash.file"
-    filepath = f"{os.path.expanduser("~")}/.passman/"
-    filepath_complete = filepath + filename
+    config = parse_config()
+    filepath_complete = f"{os.path.expanduser("~")}/{config["hashpath"]}/{config["hashfile"]}"
     ## ---------------------------------------------
     did_hashfile_exist = True
 
