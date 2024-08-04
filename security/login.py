@@ -17,6 +17,7 @@ def login():
 
     if not os.path.exists(filepath_complete):
         create_hashfile(filepath_complete)
+        create_hashfile(config["hashpath"] + config["saltfile"], os.urandom(16).decode())
         did_hashfile_exist = False
 
 

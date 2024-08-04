@@ -7,7 +7,8 @@ def parse_config():
     conf = {
         "hashfile": conf.get("user.settings", "hashfile", fallback="hash.file"),
         "hashpath": conf.get("user.settings", "hashpath", fallback=".passman"),
-        "location": conf.get("user.settings", "location", fallback="~")
+        "location": conf.get("user.settings", "location", fallback="~"),
+        "saltfile": conf.get("user.settings", "saltfile", fallback="salt.file")
         }
     
     pathlib.Path(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}").mkdir(exist_ok=True)
