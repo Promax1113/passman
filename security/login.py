@@ -17,7 +17,9 @@ def login():
 
     if not os.path.exists(filepath_complete):
         create_hashfile(filepath_complete)
-        create_hashfile(config["hashpath"] + config["saltfile"], os.urandom(16).decode())
+        # TODO MESSY. REFACTOR ASAP
+        create_hashfile(f"{os.path.expanduser(config["location"])}/{config["hashpath"]}/{config["saltfile"]}")
+        create_saltfile(f"{os.path.expanduser(config["location"])}/{config["hashpath"]}/{config["saltfile"]}", os.urandom(16))
         did_hashfile_exist = False
 
 
@@ -45,9 +47,17 @@ def create_hashfile(filepath: str, data: str = ""):
         f.write(data) if data else None
         f.close()
 
+def create_saltfile(filepath: str, data: bytes):
+    with open(filepath, "wb") as f:
+        f.write(data)
+        f.close()
+
+def parse_saltfile(filepath: str) -> bytes:
+    with open(filepath, "rb") as f:
+        return f.read()
+
 
 def parse_hashfile(filepath: str) -> str:
     #TODO may choose to parse from config here.
-
     with open(filepath, "r") as file:
         return file.readline()
