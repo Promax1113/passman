@@ -19,13 +19,13 @@ def gen_fernet_key(login: bytes) -> Fernet:
         )
     return Fernet(base64.urlsafe_b64encode(kdf.derive(login)))
 
-def read_password(filename: str, login: dict):
+def read_password(filename: str, login: dict) -> dict:
     f = gen_fernet_key(json.dumps(login).encode())
     conf = parse_config()
     with open(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/{filename}.enc", "rb") as file:
-        return f.decrypt(file.read()).decode()
+        return json.loads(f.decrypt(file.read()).decode())
     
-def create_password(password: dict, login: dict):
+def write_password(password: dict, login: dict):
     f = gen_fernet_key(json.dumps(login).encode())
     conf = parse_config()
     with open(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/{password["name"]}.enc", "wb") as file:
