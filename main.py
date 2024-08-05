@@ -1,7 +1,9 @@
 from security import login, create_password, read_password
-import choice, os, time
+import choice, os, time, getpass
 from config import parse_config
 
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
 
 result = 401
 
@@ -13,10 +15,11 @@ while result == 401:
         break
 
 print("Acess granted!")
-
+time.sleep(0.5)
 conf = parse_config()
 
 while True:
+    clear_screen()
     match choice.Menu(["read or edit a password", "create a password", "settings", "exit"]).ask():
         case "read or edit a password":
             passwords = ["".join(password.split(".")[:-1]) for password in os.listdir(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/")]
@@ -27,14 +30,27 @@ while True:
             name, action = choice.Menu(choices=passwords, actions=["read", "edit", "delete"]).ask()
             match action:
                 case "read":
-                    read_password(name, login_details)
+                    password = read_password(name, login_details)
+                    for key in password.keys():
+                        print(f"{key}: {password[key]}")
+                    input("\npress enter to continue...")
+
                 case "edit":
                     continue
                 case "delete":
-                    os.remove(f"{name}.enc") if choice.Binary(prompt="Are you sure you want to delete this password named {name}?", default=False).ask() else None
+                    os.remove(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/{name}.enc") if choice.Binary(prompt="Are you sure you want to delete this password named {name}?", default=False).ask() else None
 
         case "create a password":
-            pass
+            password = {"username": choice.Input("Enter your username on the page").ask(),
+                        "password": getpass.getpass("Password on the website: "),
+                        "note": choice.Input("Enter any note or leave blank").ask(),
+                        "name": choice.Input("Enter any name or word to recognize this password easily").ask()
+                        }
+        
+            create_password(password, login_details)
         case "exit":
+            clear_screen()
             exit()
+            
+        
     
