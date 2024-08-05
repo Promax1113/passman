@@ -1,4 +1,4 @@
-from security import login, create_password, read_password
+from security import login, write_password, read_password
 import choice, os, time, getpass
 from config import parse_config
 
@@ -30,13 +30,20 @@ while True:
             name, action = choice.Menu(choices=passwords, actions=["read", "edit", "delete"]).ask()
             match action:
                 case "read":
+                    clear_screen()
                     password = read_password(name, login_details)
                     for key in password.keys():
                         print(f"{key}: {password[key]}")
                     input("\npress enter to continue...")
 
                 case "edit":
-                    continue
+                    password = read_password(name, login_details)
+                    to_mod = choice.Menu(password.keys(), title="Choose which field to edit:").ask()
+                    print(f"current value: {password[to_mod]}")
+                    new_val = input("new value (leave blank if same as previous): ")
+                    password[to_mod] =  new_val if new_val else password[to_mod]
+                    write_password(password, login_details) if choice.Binary("Do you want to save the change", default=False).ask() else None
+
                 case "delete":
                     os.remove(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/{name}.enc") if choice.Binary(prompt="Are you sure you want to delete this password named {name}?", default=False).ask() else None
 
@@ -47,7 +54,7 @@ while True:
                         "name": choice.Input("Enter any name or word to recognize this password easily").ask()
                         }
         
-            create_password(password, login_details)
+            write_password(password, login_details)
         case "exit":
             clear_screen()
             exit()
