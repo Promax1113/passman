@@ -1,12 +1,12 @@
 from getpass import getpass
 from hashlib import sha256
 import os
-import choice
 import json
 from config import parse_config
 
 
 def login():
+    """Does the login logic for the manager."""
     #TODO this will be replaced by the config parser.
     ## ---------------------------------------------
     config = parse_config()
@@ -38,7 +38,6 @@ def login():
         return 200, login_details
     else:
         return 401, "Access denied."
-    
 
 def create_hashfile(filepath: str, data: str = ""):
     """Will create a hashfile if not there. If data passed to the function it will write to file."""
@@ -48,16 +47,18 @@ def create_hashfile(filepath: str, data: str = ""):
         f.close()
 
 def create_saltfile(filepath: str, data: bytes):
+    """Creates the saltfile used in the generation of the encryption key."""
     with open(filepath, "wb") as f:
         f.write(data)
         f.close()
 
 def parse_saltfile(filepath: str) -> bytes:
+    """Reads the saltfile used in the generation of the encryption key."""
     with open(filepath, "rb") as f:
         return f.read()
 
 
 def parse_hashfile(filepath: str) -> str:
-    #TODO may choose to parse from config here.
+    """Reads the hashfile."""
     with open(filepath, "r") as file:
         return file.readline()

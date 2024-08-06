@@ -1,8 +1,16 @@
+import os
+import time
+import getpass
+
+import choice
+
+
 from security import login, write_password, read_password
-import choice, os, time, getpass
 from config import parse_config
 
+
 def clear_screen():
+    """Clears the screen by running the correct command for the os."""
     os.system("cls" if os.name == "nt" else "clear")
 
 result = 401
@@ -20,7 +28,7 @@ conf = parse_config()
 
 while True:
     clear_screen()
-    match choice.Menu(["read or edit a password", "create a password", "settings", "exit"]).ask():
+    match choice.Menu(["read or edit a password", "create a password", "exit"]).ask():
         case "read or edit a password":
             passwords = ["".join(password.split(".")[:-1]) for password in os.listdir(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/")]
             if len(passwords) == 0:
@@ -35,7 +43,6 @@ while True:
                     for key in password.keys():
                         print(f"{key}: {password[key]}")
                     input("\npress enter to continue...")
-
                 case "edit":
                     password = read_password(name, login_details)
                     to_mod = choice.Menu(password.keys(), title="Choose which field to edit:").ask()
@@ -59,5 +66,3 @@ while True:
             clear_screen()
             exit()
             
-        
-    
