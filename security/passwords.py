@@ -32,9 +32,12 @@ def read_password(filename: str, login: dict) -> dict:
         return json.loads(f.decrypt(file.read()).decode())
 
 
-def write_password(password: dict, login: dict):
+def write_password(password: dict, login: dict, changed_name: bool = False, old_name: str = None):
     """Writes the password to the file and encrypts it."""
     f = gen_fernet_key(json.dumps(login).encode())
     conf = parse_config()
     with open(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/{password["name"]}.enc", "wb") as file:
         file.write(f.encrypt(json.dumps(password).encode()))
+
+    if changed_name:
+        os.remove(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/{old_name}.enc")
