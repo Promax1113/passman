@@ -29,7 +29,7 @@ conf = parse_config()
 
 while True:
     clear_screen()
-    match choice.Menu(["read or edit a password", "create a password", "generate a password", "exit"]).ask():
+    match choice.Menu(["read or edit a password", "create a password", "generate a password", "temp email", "exit"]).ask():
         case "read or edit a password":
             passwords = ["".join(password.split(".")[:-1]) for password in
                          os.listdir(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/")]
@@ -82,6 +82,9 @@ while True:
             print(f"Your password: \n\n{passwd}\n\n")
             input("press any enter to continue...")
 
+        case "temp email":
+            pass
+        
         case "exit":
             clear_screen()
             exit()
