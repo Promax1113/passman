@@ -6,6 +6,7 @@ import choice
 
 def generate_password():
     """Generates a password from all ascii characters, numbers and some symbols."""
+    password = "undefined"
     chars = string.ascii_uppercase + string.ascii_lowercase + "1234567890" + r"$%&()=?{}!*^"
     ok = False
     while not ok:

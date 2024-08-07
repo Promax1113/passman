@@ -4,7 +4,6 @@ import getpass
 
 import choice
 
-
 from security import login, write_password, read_password, generate_password
 from config import parse_config
 
@@ -13,7 +12,9 @@ def clear_screen():
     """Clears the screen by running the correct command for the os."""
     os.system("cls" if os.name == "nt" else "clear")
 
+
 result = 401
+login_details = {"username": "", "password": ""}
 
 while result == 401:
     result, login_details = login()
@@ -22,7 +23,7 @@ while result == 401:
     else:
         break
 
-print("Acess granted!")
+print("Accss granted!")
 time.sleep(0.5)
 conf = parse_config()
 
@@ -30,7 +31,8 @@ while True:
     clear_screen()
     match choice.Menu(["read or edit a password", "create a password", "generate a password", "exit"]).ask():
         case "read or edit a password":
-            passwords = ["".join(password.split(".")[:-1]) for password in os.listdir(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/")]
+            passwords = ["".join(password.split(".")[:-1]) for password in
+                         os.listdir(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/")]
             if len(passwords) == 0:
                 print("\nThere are no passwords saved!\n")
                 time.sleep(1)
@@ -54,12 +56,17 @@ while True:
                         current_name = password[to_mod]
                     print(f"current value: {password[to_mod]}")
                     new_val = input("new value (leave blank if same as previous): ")
-                    password[to_mod] =  new_val if new_val else password[to_mod]
-                    
-                    write_password(password, login_details, changed_name=changed_name, old_name=current_name) if choice.Binary("Do you want to save the change", default=False).ask() else None
+                    password[to_mod] = new_val if new_val else password[to_mod]
+
+                    write_password(password, login_details, changed_name=changed_name,
+                                   old_name=current_name) if choice.Binary("Do you want to save the change",
+                                                                           default=False).ask() else None
 
                 case "delete":
-                    os.remove(f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/{name}.enc") if choice.Binary(prompt="Are you sure you want to delete this password named {name}?", default=False).ask() else None
+                    os.remove(
+                        f"{os.path.expanduser(conf["location"])}/{conf["hashpath"]}/passwords/{name}.enc") if choice.Binary(
+                        prompt="Are you sure you want to delete this password named {name}?",
+                        default=False).ask() else None
 
         case "create a password":
             password = {"username": choice.Input("Enter your username on the page").ask(),
@@ -67,7 +74,7 @@ while True:
                         "note": choice.Input("Enter any note or leave blank").ask(),
                         "name": choice.Input("Enter any name or word to recognize this password easily").ask()
                         }
-        
+
             write_password(password, login_details)
 
         case "generate a password":
@@ -78,4 +85,3 @@ while True:
         case "exit":
             clear_screen()
             exit()
-            
