@@ -5,6 +5,7 @@ import getpass
 import choice
 
 from security import login, write_password, read_password, generate_password
+from temp_email import get_email_address, check_email_in_inbox, check_inbox
 from config import parse_config
 
 
@@ -83,8 +84,18 @@ while True:
             input("press any enter to continue...")
 
         case "temp email":
-            pass
-        
+            #email = get_email_address()
+            email = "39k1v8sc@dpptd.com"
+            
+            print(f"Email address: {email}")
+            input("press enter when you have registered the email...")
+            inbox = check_inbox(email)
+            titles = [( email["id"], email["subject"]) for email in inbox]
+            email_to_check = choice.Menu(titles, title="Select the email you want to read:").ask()
+            print(email_to_check)
+            email = check_email_in_inbox(email, email_to_check)
+            print(email)
+            input("press enter when you have entered the code")
         case "exit":
             clear_screen()
             exit()

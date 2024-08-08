@@ -22,11 +22,11 @@ def check_inbox(email: str):
 
     return requests.get(f"{URL}{get_inbox}").json()
 
-def check_last_email_inbox(email: str, email_id: int):
+def check_email_in_inbox(email: str, email_id: int):
     """Checks the last email in the email provided using the API."""
     global URL
     user  = email.split("@")[0]
     domain = email.split("@")[1]
     action = "/?action=readMessage&login={user}&domain={domain}&id={email_id}"
-    return requests.get(f"{URL}{action}").json()
+    return requests.get(f"{URL}{action}").text
 

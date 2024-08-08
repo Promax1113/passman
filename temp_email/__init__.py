@@ -1,1 +1,1 @@
-from .temp_mail import get_email_address
+from .temp_mail import get_email_address, check_inbox, check_email_in_inbox
